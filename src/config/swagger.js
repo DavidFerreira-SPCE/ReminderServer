@@ -1,5 +1,6 @@
 const swaggerJsDoc = require('swagger-jsdoc'); 
 const swaggerUi = require('swagger-ui-express');
+const path = require('path');
 
 const swaggerOptions = {
     definition: {
@@ -14,14 +15,8 @@ const swaggerOptions = {
                 url: 'http://localhost:3000',
             },
         ],
-        tags: [
-      {
-        name: 'Lembretes',
-        description: 'Gerenciamento de lembretes'
-      },
-    ]
-},
-    apis: ['./routes/*.js', './controllers/*.js'],
+    },
+    apis: [path.join(__dirname, '../routes/*.js')],
 };
 
 // Compila a documentação

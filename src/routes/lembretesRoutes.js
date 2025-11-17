@@ -1,9 +1,11 @@
 const express = require('express')
 const Router = express.Router();
+const {listarLembrete,listarLembreteByMedicamento,criarLembrete,apagarLembrete} = require('./../controllers/lembretesCTRS');
 
-Router.get('/',MostrarCategorias)
-Router.post('/',CriarCategorias)
-Router.delete('/',ApagarCategorias)
+Router.get('/',listarLembrete)
+Router.get('/',listarLembreteByMedicamento)
+Router.post('/',criarLembrete)
+Router.delete('/',apagarLembrete)
 
 
 /**
@@ -13,72 +15,65 @@ Router.delete('/',ApagarCategorias)
  *     Category:
  *       type: object
  *       required:
- *         - id
- *         - name
- *       properties:
- *         id:
- *           type: integer
- *           description: ID da categoria
- *         name:
+ *         - nomeRemedio
+ *         nomeRemedio:
  *           type: string
  *           description: Nome da categoria
  *       example:
- *         id: 1
- *         name: Alimentação
+ *         nomeRemedio: Cloridrato de Metformina
  */
+Router.get('/',listarLembreteByMedicamento)
 
 /**
  * @swagger
  * /categories:
  *   get:
- *     summary: Lista todas as categorias
- *     tags: [Categorias]
+ *     summary: Lista todos os Lembretes
+ *     tags: [lembretes]
  *     responses:
  *       200:
- *         description: Lista de categorias retornada com sucesso
+ *         description: Lista de lembretes retornada com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Category'
+ *                 $ref: '#/components/schemas/lembretes'
  *       500:
- *         description: Erro ao visualizar as categorias
+ *         description: Erro ao visualizar os lembretes
  */
-router.get('/', MostrarCategorias)
+Router.get('/',listarLembrete)
 
 /**
  * @swagger
  * /categories:
  *   post:
- *     summary: Cria uma nova categoria
- *     tags: [Categorias]
+ *     summary: Cria um novo lembrete
+ *     tags: [lembretes]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Category'
+ *             $ref: '#/components/schemas/lembretes'
  *     responses:
  *       200:
- *         description: Categoria criada com sucesso
+ *         description: Lembrete criado com sucesso
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Category'
- *       400:
- *         description: Dados inválidos (nome não pode ser apenas números)
+ *               $ref: '#/components/schemas/lembretes'
  *       500:
- *         description: Erro ao criar a categoria
+ *         description: Erro ao criar o lembrete
  */
-router.post('/', CriarCategorias)
+Router.post('/',criarLembrete)
 
 /**
  * @swagger
  * /categories:
  *   delete:
- *     summary: Apaga uma categoria
- *     tags: [Categorias]
+ *     summary: Apaga um lembrete
+ *     tags: [lembretes]
  *     requestBody:
  *       required: true
  *       content:
@@ -90,15 +85,15 @@ router.post('/', CriarCategorias)
  *             properties:
  *               id:
  *                 type: integer
- *                 description: ID da categoria a ser excluída
+ *                 description: ID do lembrete a ser deletado do registro
  *             example:
  *               id: 1
  *     responses:
  *       200:
- *         description: Categoria excluída com sucesso
+ *         description: Lembrete excluido com sucesso
  *       500:
- *         description: Erro ao excluir a categoria
+ *         description: Não foi possivel apagar o lembrete
  */
-router.delete('/', ApagarCategorias)
+Router.delete('/', apagarLembrete)
 
 module.exports = Router

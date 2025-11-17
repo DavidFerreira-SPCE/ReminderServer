@@ -1,41 +1,48 @@
 const pool = require('../config/db.js');
 
-const ListarLembretes = async (_, res) => {
+const listarLembrete = async (_, res) => {
     try {
         const view = await pool.query('SELECT * FROM lembretes')
         res.status(200).json(view.rows)
     } catch (err) {
-        console.error('Falha em exibir', err)
-        res.status(500).json({ error: 'Não foi possivel visualizar os tipos de registros' })
+        console.error('Falha em exibição', err)
+        res.status(500).json({ error: 'Não foi possivel visualizar os lembretes' })
     }
 }
 
-const ListarLembretesByMedicamento = async (req, res) => {
+const listarLembreteByMedicamento = async (req, res) => {
     const { nomeRemedio } = req.body
+    try {
     const viewName = await pool.query('SELECT * FROM lembretes WHERE nomeRemedio = $1'[nomeRemedio])
     res.status(200).json(viewName.rows)
+ } catch (err) {
+     console.error('Falha na solicitação', err)
+     res.status(500).json({ error: 'Não foi possivel ver os lembretes para este remédio'})
+ }
 }
 
 
-const CriarRegistro = async (req, res) => {
+const criarLembrete = async (req, res) => {
+    const {nomeRemedio,horario,recorrencia} = req.body
     try {
-        const tipo = await pool.query('SELECT * FROM registros')
-        res.status(200).json(tipo.rows)
+        const add = await pool.query('INSERT INTO lembretes (nomeRemedio,horario,recorrencia) VALUES ($1, $2, $3) RETURNING *'
+            [nomeRemedio,horario,recorrencia])
+        res.status(200).json(add.rows)
     } catch (err) {
         console.error('Falha na requisição', err)
-        res.status(500).json({ error: 'Não foi possivel conectar-se' })
+        res.status(500).json({ error: 'Verifique as Informações e tente novamente' })
     }
 }
 
-const ApagarRegistro = async (req, res) => {
+const apagarLembrete = async (req, res) => {
     const { id } = req.body;
     try {
-        const vasco = await pool.query('DELETE * FROM registros')
-        res.status(200).json(vasco.rows)
+        const DELETE = await pool.query('DELETE * FROM lembretes WHERE id = $1' [id])
+        res.status(200).json(DELETE.rows)
     } catch (err) {
         console.error('Falha na requisição', err)
-        res.status(500).json({ error: 'Não foi possivel deletar' })
+        res.status(500).json({ error: 'Não foi possivel apagar o lembrete' })
     }
 }
 
-module.exports = { MostrarRegistros, CriarRegistro, ApagarRegistro }
+module.exports = { listarLembrete,listarLembreteByMedicamento,criarLembrete,apagarLembrete }

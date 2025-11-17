@@ -1,6 +1,5 @@
 const express = require('express')
 const Router = express.Router();
-const { MostrarCategorias,CriarCategorias, ApagarCategorias} = require('./../controllers/categoriesCTRS');
 
 Router.get('/',MostrarCategorias)
 Router.post('/',CriarCategorias)

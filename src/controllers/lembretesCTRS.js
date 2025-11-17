@@ -12,7 +12,6 @@ const listarLembrete = async (_, res) => {
 
 const listarLembreteByMedicamento = async (req, res) => {
   const { nomeRemedio } = req.body;
-  
   try {
     const viewName = await pool.query(
       'SELECT * FROM lembretes WHERE nomeRemedio = $1',
@@ -29,6 +28,9 @@ const listarLembreteByMedicamento = async (req, res) => {
 
 const criarLembrete = async (req, res) => {
     const { nomeRemedio, horario, recorrencia } = req.body;
+    if (!nomeRemedio || !horario || !recorrencia) {
+                return res.status(404).json({ error: 'Todos os campos são obrigatórios, Verifique os campos em branco' })
+            }
     try {
         const add = await pool.query(
             'INSERT INTO lembretes (nomeRemedio, horario, recorrencia) VALUES ($1, $2, $3) RETURNING *',

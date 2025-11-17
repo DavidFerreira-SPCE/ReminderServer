@@ -19,8 +19,6 @@ const swaggerOptions = {
     apis: [path.join(__dirname, '../routes/*.js')],
 };
 
-// Compila a documentação
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-// EXPORTAÇÃO: O server.js recebe este objeto
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
 module.exports = swaggerDocs;

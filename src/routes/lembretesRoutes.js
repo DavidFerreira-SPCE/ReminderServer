@@ -1,99 +1,112 @@
-const express = require('express')
+const express = require('express');
 const Router = express.Router();
-const {listarLembrete,listarLembreteByMedicamento,criarLembrete,apagarLembrete} = require('./../controllers/lembretesCTRS');
 
-Router.get('/',listarLembrete)
-Router.get('/',listarLembreteByMedicamento)
-Router.post('/',criarLembrete)
-Router.delete('/',apagarLembrete)
-
+const { listarLembrete, listarLembreteByMedicamento, criarLembrete, apagarLembrete } = require('./../controllers/lembretesCTRS');
 
 /**
  * @swagger
  * components:
- *   schemas:
- *     Category:
- *       type: object
- *       required:
- *         - nomeRemedio
- *         nomeRemedio:
- *           type: string
- *           description: Nome da categoria
- *       example:
- *         nomeRemedio: Cloridrato de Metformina
+ * schemas:
+ * Lembrete:
+ * type: object
+ * required:
+ * - nomeRemedio
+ * - horario
+ * properties:
+ * id:
+ * type: integer
+ * description: ID gerado automaticamente
+ * nomeRemedio:
+ * type: string
+ * description: Nome do medicamento
+ * horario:
+ * type: string
+ * description: Horário do lembrete
+ * example:
+ * nomeRemedio: Cloridrato de Metformina
+ * horario: "08:00"
  */
-Router.get('/',listarLembreteByMedicamento)
 
 /**
  * @swagger
- * /categories:
- *   get:
- *     summary: Lista todos os Lembretes
- *     tags: [lembretes]
- *     responses:
- *       200:
- *         description: Lista de lembretes retornada com sucesso
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/lembretes'
- *       500:
- *         description: Erro ao visualizar os lembretes
+ * tags:
+ * name: Lembretes
+ * description: Gerenciamento de remédios
  */
-Router.get('/',listarLembrete)
 
 /**
  * @swagger
- * /categories:
- *   post:
- *     summary: Cria um novo lembrete
- *     tags: [lembretes]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/lembretes'
- *     responses:
- *       200:
- *         description: Lembrete criado com sucesso
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/lembretes'
- *       500:
- *         description: Erro ao criar o lembrete
+ * /lembretes:
+ * get:
+ * summary: Lista todos os Lembretes
+ * tags: [Lembretes]
+ * responses:
+ * 200:
+ * description: Lista de lembretes retornada com sucesso
+ * content:
+ * application/json:
+ * schema:
+ * type: array
+ * items:
+ * $ref: '#/components/schemas/Lembrete'
  */
-Router.post('/',criarLembrete)
+Router.get('/', listarLembrete);
 
 /**
  * @swagger
- * /categories:
- *   delete:
- *     summary: Apaga um lembrete
- *     tags: [lembretes]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - id
- *             properties:
- *               id:
- *                 type: integer
- *                 description: ID do lembrete a ser deletado do registro
- *             example:
- *               id: 1
- *     responses:
- *       200:
- *         description: Lembrete excluido com sucesso
- *       500:
- *         description: Não foi possivel apagar o lembrete
+ * /lembretes/busca:
+ * get:
+ * summary: Busca lembrete por nome do medicamento
+ * tags: [Lembretes]
+ * parameters:
+ * - in: query
+ * name: nome
+ * schema:
+ * type: string
+ * description: Nome do remédio para filtrar
+ * responses:
+ * 200:
+ * description: Lembrete encontrado
  */
-Router.delete('/', apagarLembrete)
 
-module.exports = Router
+Router.get('/busca', listarLembreteByMedicamento);
+
+/**
+ * @swagger
+ * /lembretes:
+ * post:
+ * summary: Cria um novo lembrete
+ * tags: [Lembretes]
+ * requestBody:
+ * required: true
+ * content:
+ * application/json:
+ * schema:
+ * $ref: '#/components/schemas/Lembrete'
+ * responses:
+ * 200:
+ * description: Lembrete criado com sucesso
+ */
+Router.post('/', criarLembrete);
+
+/**
+ * @swagger
+ * /lembretes/{id}:
+ * delete:
+ * summary: Apaga um lembrete pelo ID
+ * tags: [Lembretes]
+ * parameters:
+ * - in: path
+ * name: id
+ * schema:
+ * type: integer
+ * required: true
+ * description: ID do lembrete
+ * responses:
+ * 200:
+ * description: Lembrete excluido com sucesso
+ */
+
+Router.delete('/:id', apagarLembrete);
+
+module.exports = Router;

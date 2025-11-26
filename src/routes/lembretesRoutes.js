@@ -98,7 +98,7 @@ Router.get('/busca', listarLembreteByMedicamento);
  *       400:
  *         description: Dados incompletos ou inválidos
  */
-Router.post('/', criarLembrete);
+Router.post('/criar', criarLembrete);
 
 /**
  * @swagger

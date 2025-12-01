@@ -19,7 +19,7 @@ const UpdateUser = async (req, res) => {
     const { usermail,userpassword } = req.body;
     try {
         const requistion = await pool.query(
-            `UPDATE users SET usermail = $1, iserpassword = $2 WHERE id = $3 RETURNING *`,
+            `UPDATE users SET usermail = $1, userpassword = $2 WHERE id = $3 RETURNING *`,
             [usermail, userpassword, id]
         );
         res.status(200).json(requistion.rows[0]);
@@ -30,7 +30,7 @@ const UpdateUser = async (req, res) => {
 }
 
 const DeleteUser = async(req,res) => {
-    const {id} = req.body
+    const {id} = req.params
     try {
         const apagar = await pool.query('DELETE FROM users WHERE id = $1 RETURNING *', [id])
         res.status(200).json(apagar.rows)

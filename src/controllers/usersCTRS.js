@@ -5,7 +5,7 @@ const CreateNewUser = async (req,res) => {
     if (!usermail || !userpassword) {
         return res.status(404).json({error: 'Preencha as informações antes de apertar, seu fela'})
  }    try {
-        const adicionar = await pool.query('INSERT INTO users (username, usermail, userpassword) VALUES ($1, $2) RETURNING *'
+        const adicionar = await pool.query('INSERT INTO users (usermail, userpassword) VALUES ($1, $2) RETURNING *'
             [usermail,userpassword])
         res.status(200).json(adicionar.rows)
     } catch (err) {
